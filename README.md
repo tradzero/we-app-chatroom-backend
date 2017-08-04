@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 GatewayWorker windows 版本
 =================
 
@@ -44,3 +45,6 @@ http://www.workerman.net/gatewaydoc/
 [Live demo](http://chat.workerman.net/)  
 [Source code](https://github.com/walkor/workerman-chat)  
 ![workerman-chat](http://www.workerman.net/img/workerman-chat.png)  
+=======
+#weapp-backend
+>>>>>>> 6b7bcff25dc0817884dd4b20e69f84bf294863bb
