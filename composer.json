@@ -4,6 +4,12 @@
     "homepage": "http://www.workerman.net",
     "license" : "MIT",
     "require": {
-        "workerman/gateway-worker" : ">=3.0.0"
+        "workerman/gateway-worker" : ">=3.0.0",
+        "hassankhan/config": "^0.10.0"
+    },
+    "autoload": {
+        "files": [
+            "Applications/helpers.php"
+        ]
     }
 }
