@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'enable' => false,
     'ssl' => [
+        'enable' => false,
         'cert' => '',
         'key' => '',
     ],
