@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * This file is part of workerman.
  *
@@ -20,8 +20,23 @@ use \Workerman\Autoloader;
 // 自动加载类
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-// gateway 进程，这里使用Text协议，可以用telnet测试
-$gateway = new Gateway("websocket://0.0.0.0:8282");
+$config = config();
+// 加载ssl key 开启wss
+if ($config->get('ssl.enable')) {
+    $context = [
+        'ssl' => [
+            'local_cert' => $config->get('ssl.cert'),
+            'local_pk'   => $config->get('ssl.key'),
+            'verify_peer' => false
+        ],
+    ];
+    // gateway 进程，这里使用Text协议，可以用telnet测试
+    $gateway = new Gateway("websocket://0.0.0.0:8282", $context);
+    $gateway->transport = 'ssl';
+} else {
+    $gateway = new Gateway("websocket://0.0.0.0:8282");
+}
+
 // gateway名称，status方便查看
 $gateway->name = 'YourAppGateway';
 // gateway进程数
@@ -41,10 +56,8 @@ $gateway->registerAddress = '127.0.0.1:1238';
 
 
 // 当客户端连接上来时，设置连接的onWebSocketConnect，即在websocket握手时的回调
-$gateway->onConnect = function($connection)
-{
-    $connection->onWebSocketConnect = function($connection , $http_header)
-    {
+$gateway->onConnect = function ($connection) {
+    $connection->onWebSocketConnect = function ($connection, $http_header) {
         // 可以在这里判断连接来源是否合法，不合法就关掉连接
         // $_SERVER['HTTP_ORIGIN']标识来自哪个站点的页面发起的websocket链接
         // if($_SERVER['HTTP_ORIGIN'] != 'http://kedou.workerman.net')
@@ -54,12 +67,10 @@ $gateway->onConnect = function($connection)
         // onWebSocketConnect 里面$_GET $_SERVER是可用的
         // var_dump($_GET, $_SERVER);
     };
-}; 
+};
 
 
 // 如果不是在根目录启动，则运行runAll方法
-if(!defined('GLOBAL_START'))
-{
+if (!defined('GLOBAL_START')) {
     Worker::runAll();
 }
-
