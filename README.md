@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 GatewayWorker windows 版本
-=================
 
 GatewayWorker基于[Workerman](https://github.com/walkor/Workerman)开发的一个项目框架，用于快速开发长连接应用，例如app推送服务端、即时IM服务端、游戏服务端、物联网、智能家居等等。
 
@@ -47,4 +45,3 @@ http://www.workerman.net/gatewaydoc/
 ![workerman-chat](http://www.workerman.net/img/workerman-chat.png)  
 =======
 #weapp-backend
->>>>>>> 6b7bcff25dc0817884dd4b20e69f84bf294863bb
