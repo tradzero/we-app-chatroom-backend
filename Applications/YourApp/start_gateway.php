@@ -34,7 +34,7 @@ if ($config->get('ssl.enable')) {
     $gateway = new Gateway("websocket://0.0.0.0:8282", $context);
     $gateway->transport = 'ssl';
 } else {
-    $gateway = new Gateway("websocket://0.0.0.0:8282");
+    $gateway = new Gateway("websocket://127.0.0.1:8282");
 }
 
 // gateway名称，status方便查看
