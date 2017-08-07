@@ -1,6 +1,6 @@
 <?php
 
-namespace ws;
+namespace Ws;
 
 use Adarts\Dictionary;
 

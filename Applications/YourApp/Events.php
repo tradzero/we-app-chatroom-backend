@@ -7,7 +7,7 @@
 //declare(ticks=1);
 
 use \GatewayWorker\Lib\Gateway;
-use ws\Filter;
+use Ws\Filter;
 
 class Events
 {
@@ -26,7 +26,7 @@ class Events
     /**
      * 当客户端连接时触发
      * 如果业务不需此回调可以删除onConnect
-     * 
+     *
      * @param int $client_id 连接id
      */
     public static function onConnect($client_id)
@@ -60,7 +60,7 @@ class Events
             'type' => self::LOGOUT_MESSAGE,
             'client' => $client_id
         ];
-        // 向所有人发送 
+        // 向所有人发送
         Gateway::sendToAll(json_encode($body), null, $client_id);
     }
 
@@ -91,7 +91,7 @@ class Events
             'userInfo' => $message->userInfo,
         ];
 
-         // 向所有人发送 
+         // 向所有人发送
         Gateway::sendToAll(json_encode($body), null, $client_id);
     }
 
