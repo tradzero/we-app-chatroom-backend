@@ -7,6 +7,7 @@
 //declare(ticks=1);
 
 use \GatewayWorker\Lib\Gateway;
+use ws\Filter;
 
 class Events
 {
@@ -79,10 +80,14 @@ class Events
 
     protected static function broadcastMessage($client_id, $message)
     {
+        $text = $message->message;
+        $filter = new Filter();
+        $text = $filter->filterText($text);
+
         $body = [
             'type'    => self::SEND_MESSAGE,
             'client'  => $client_id,
-            'message' => $message->message,
+            'message' => $text,
             'userInfo' => $message->userInfo,
         ];
 

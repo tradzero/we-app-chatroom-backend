@@ -5,11 +5,15 @@
     "license" : "MIT",
     "require": {
         "workerman/gateway-worker" : ">=3.0.0",
-        "hassankhan/config": "^0.10.0"
+        "hassankhan/config": "^0.10.0",
+        "andares/adarts": "^1.5"
     },
     "autoload": {
         "files": [
             "Applications/helpers.php"
-        ]
+        ],
+        "psr-4": {
+            "ws\\": "Applications/yourApp/"
+        }
     }
 }
