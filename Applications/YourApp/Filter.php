@@ -6,6 +6,9 @@ use Adarts\Dictionary;
 
 class Filter
 {
+    const CACHE_PATH       = __DIR__ . '/../cache/dict_cache';
+    const BANNED_WORD_PATH = __DIR__ . '/../storage/banned_words.txt';
+
     protected $dict;
     protected $bannedWords;
 
@@ -48,7 +51,7 @@ class Filter
 
     protected function initDict()
     {
-        $filePath = __DIR__ . '/../cache/dict_cache';
+        $filePath = self::CACHE_PATH;
 
         if (file_exists($filePath)) {
             $packed = file_get_contents($filePath);
@@ -79,7 +82,7 @@ class Filter
 
     protected function saveDictCache($dict)
     {
-        $filePath = __DIR__ . '/../cache/dict_cache';
+        $filePath = self::CACHE_PATH;
 
         $packed = serialize($dict);
 
@@ -88,7 +91,7 @@ class Filter
 
     protected function loadBannedWord()
     {
-        $filePath = __DIR__ . '/../storage/banned_words.txt';
+        $filePath = self::BANNED_WORD_PATH;
 
         $lines = file($filePath);
 
