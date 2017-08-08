@@ -73,6 +73,7 @@ class Events
                 break;
             case self::RECEIVE_TYPE_NUMBER:
                 self::sendNumberMessage();
+                break;
             default:
                 break;
         }
@@ -80,8 +81,8 @@ class Events
 
     protected static function broadcastMessage($client_id, $message)
     {
-        $text = $message->message;
         $filter = new Filter();
+        $text = $message->message;
         $text = $filter->filterText($text);
 
         $body = [
