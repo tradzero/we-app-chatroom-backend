@@ -27,7 +27,7 @@ class Filter
     }
 
     /**
-     * 过略文本
+     * 过滤文本
      *
      * @return void
      */
