@@ -23,6 +23,20 @@ class Events
     
     const CLIENT_SYSTEM = 'system'; // 客户端类型 系统信息
 
+    protected static $filter = null;
+
+    /**
+     * work初始化执行的方法
+     *
+     * @param [Worker] $businessWorker
+     * @return void
+     */
+    public static function onWorkerStart($businessWorker)
+    {
+        $filter = new Filter();
+        self::$filter = $filter;
+    }
+
     /**
      * 当客户端连接时触发
      * 如果业务不需此回调可以删除onConnect
@@ -81,9 +95,8 @@ class Events
 
     protected static function broadcastMessage($client_id, $message)
     {
-        $filter = new Filter();
         $text = $message->message;
-        $text = $filter->filterText($text);
+        $text = self::$filter->filterText($text);
 
         $body = [
             'type'    => self::SEND_MESSAGE,
