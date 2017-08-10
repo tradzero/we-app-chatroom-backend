@@ -8,22 +8,19 @@
 
 use \GatewayWorker\Lib\Gateway;
 use Ws\Filter;
+use Ws\Messages\BroadcastMessage;
+use Ws\Messages\CountMessage;
+use Ws\Messages\HeartbeatMessage;
+use Ws\Messages\LoginMessage;
+use Ws\Messages\LogoutMessage;
+use Ws\Messages\Message;
 
 class Events
 {
-    // 发送给客户端的类型
-    const SEND_MESSAGE = 'message'; // 发送消息
-    const LOGIN_MESSAGE = 'login'; // 登录
-    const LOGOUT_MESSAGE = 'logout'; // 登出
-    const NUMBER_MESSAGE = 'number'; // 人数统计
-
     // 接收到的信息类型
     const RECEIVE_TYPE_MESSAGE = 'message'; // 发送消息
     const RECEIVE_TYPE_NUMBER = 'number'; // 人数统计
-    
-    const CLIENT_SYSTEM = 'system'; // 客户端类型 系统信息
-
-    protected static $filter = null;
+    const RECEIVE_TYPE_HEARTBEAT = 'pong'; // 心跳回复
 
     /**
      * work初始化执行的方法
@@ -33,8 +30,6 @@ class Events
      */
     public static function onWorkerStart($businessWorker)
     {
-        $filter = new Filter();
-        self::$filter = $filter;
     }
 
     /**
@@ -45,12 +40,8 @@ class Events
      */
     public static function onConnect($client_id)
     {
-        $body = [
-            'type' => self::LOGIN_MESSAGE,
-            'client' => $client_id
-        ];
-        // 向所有人发送
-        Gateway::sendToAll(json_encode($body), null, $client_id);
+        $messager = new LoginMessage($client_id);
+        $messager->send();
     }
     
    /**
@@ -70,52 +61,27 @@ class Events
         */
     public static function onClose($client_id)
     {
-        $body = [
-            'type' => self::LOGOUT_MESSAGE,
-            'client' => $client_id
-        ];
-        // 向所有人发送
-        Gateway::sendToAll(json_encode($body), null, $client_id);
+        $messager = new LogoutMessage($client_id);
+        $messager->send();
     }
 
     protected static function decodeMessage($client_id, $message)
     {
         $message = json_decode($message);
+
         switch ($message->type) {
             case self::RECEIVE_TYPE_MESSAGE:
-                self::broadcastMessage($client_id, $message);
+                $messsager = new BroadcastMessage($client_id, $message);
                 break;
             case self::RECEIVE_TYPE_NUMBER:
-                self::sendNumberMessage();
+                $messsager = new CountMessage($client_id, $message);
+                break;
+            case self::RECEIVE_TYPE_HEARTBEAT:
+                $messsager = new HeartbeatMessage($client_id, $message);
                 break;
             default:
                 break;
         }
-    }
-
-    protected static function broadcastMessage($client_id, $message)
-    {
-        $text = $message->message;
-        $text = self::$filter->filterText($text);
-
-        $body = [
-            'type'    => self::SEND_MESSAGE,
-            'client'  => $client_id,
-            'message' => $text,
-            'userInfo' => $message->userInfo,
-        ];
-
-         // 向所有人发送
-        Gateway::sendToAll(json_encode($body), null, $client_id);
-    }
-
-    protected static function sendNumberMessage()
-    {
-        $body = [
-            'type' => self::NUMBER_MESSAGE,
-            'client' => self::CLIENT_SYSTEM,
-            'message' => Gateway::getAllClientCount(),
-        ];
-        Gateway::sendToCurrentClient(json_encode($body));
+        $messsager->send();
     }
 }
