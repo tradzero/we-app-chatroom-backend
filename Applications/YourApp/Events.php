@@ -13,14 +13,16 @@ use Ws\Messages\CountMessage;
 use Ws\Messages\HeartbeatMessage;
 use Ws\Messages\LoginMessage;
 use Ws\Messages\LogoutMessage;
+use Ws\Messages\CloseClientMessage;
 use Ws\Messages\Message;
 
 class Events
 {
     // 接收到的信息类型
-    const RECEIVE_TYPE_MESSAGE = 'message'; // 发送消息
-    const RECEIVE_TYPE_NUMBER = 'number'; // 人数统计
+    const RECEIVE_TYPE_MESSAGE   = 'message'; // 发送消息
+    const RECEIVE_TYPE_NUMBER    = 'number'; // 人数统计
     const RECEIVE_TYPE_HEARTBEAT = 'pong'; // 心跳回复
+    const RECEIVE_TYPE_CLOSE     = 'close'; // 请求关闭连接
 
     /**
      * work初始化执行的方法
@@ -78,6 +80,9 @@ class Events
                 break;
             case self::RECEIVE_TYPE_HEARTBEAT:
                 $messsager = new HeartbeatMessage($client_id, $message);
+                break;
+            case self::RECEIVE_TYPE_CLOSE:
+                $messsager = new CloseClientMessage($client_id, $message);
                 break;
             default:
                 break;
