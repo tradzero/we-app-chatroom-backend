@@ -1,5 +1,5 @@
 {
-    "name"  : "workerman/gateway-worker-for-win-demo",
+    "name"  : "we-app-chatroom-backend",
     "keywords": ["distributed","communication"],
     "homepage": "http://www.workerman.net",
     "license" : "MIT",
